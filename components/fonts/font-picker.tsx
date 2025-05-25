@@ -66,6 +66,8 @@ const fontWeights = [
 ];
 
 export default function FontPicker({ onFontChange }: FontPickerProps) {
+    const lineClass = "mb-6 flex place-content-between"
+
   const [fontProperties, setFontProperties] = React.useState<FontProperties>({
     fontFamily: "Inter",
     fontSize: 16,
@@ -174,7 +176,7 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
         </div>
       </div>
 
-      <div className="mb-6">
+      <div className={lineClass}>
         <Heading>Case</Heading>
 
         <div className="flex gap-2">
@@ -191,7 +193,7 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
                   ? "default"
                   : "ghost"
               }
-              className={`h-10 px-4 rounded-lg ${
+              className={`h-10 px-3 rounded-lg ${
                 fontProperties.textTransform === caseOption.value
                   ? "bg-blue-500 text-white shadow-sm"
                   : "bg-background text-gray-700 shadow-sm hover:bg-gray-50"
@@ -204,7 +206,7 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
         </div>
       </div>
 
-      <div className="mb-6">
+      <div className={lineClass}>
         <Heading>Alignment</Heading>
         <div className="flex gap-2">
           {[
@@ -229,7 +231,7 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
         </div>
       </div>
 
-      <div className="mb-6">
+      <div className={lineClass}>
         <Heading>Decoration</Heading>
         <div className="flex gap-2">
           {[
@@ -253,7 +255,7 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
         </div>
       </div>
 
-      <div className="mb-6">
+      <div className={lineClass}>
         <Heading>Fill</Heading>     
         <div className="space-y-4">
           <div className="flex items-center gap-3">
@@ -273,7 +275,7 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
         </div>
       </div>
 
-      <div className="mb-4">
+      <div className={lineClass}>
         <Heading>Effects</Heading>
         <Select
           value={fontProperties.textShadow}
@@ -328,6 +330,7 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
 
 function Heading({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-base font-medium text-primary mb-6">{children}</h3>
+    <h3 className="text-base font-medium text-primary mb-3">{children}</h3>
   );
 }
+
