@@ -294,87 +294,97 @@ function DecorationSection({ fontProperties, updateProperty }: SectionProps) {
   );
 }
 
-// ...existing code...
+
 function FillSection({ fontProperties, updateProperty }: SectionProps) {
-  const [hexValue, setHexValue] = React.useState(fontProperties.color.replace('#', ''));
+  const [hexValue, setHexValue] = React.useState(fontProperties.color.replace("#", ""))
+  const colorInputRef = React.useRef<HTMLInputElement>(null)
 
   const handleHexChange = (value: string) => {
-    // Remove any non-hex characters
-    let cleanValue = value.replace(/[^0-9a-fA-F]/g, '').toLowerCase();
-    
-    // Only auto-repeat if it's a single character AND the input is being typed (not backspaced)
-    if (cleanValue.length === 1 && value.length === 1) {
-      cleanValue = cleanValue.repeat(6);
-    }
-    
-    // Limit to 6 characters
-    cleanValue = cleanValue.slice(0, 6);
-    setHexValue(cleanValue);
-  };
+    const cleanValue = value
+      .replace(/[^0-9a-fA-F]/g, "")
+      .toLowerCase()
+      .slice(0, 6)
+    setHexValue(cleanValue)
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      if (hexValue.length >= 3) {
-        const paddedHex = hexValue.length < 6 ? hexValue.padEnd(6, '0') : hexValue;
-        setHexValue(paddedHex);
-        updateProperty("color", `#${paddedHex}`);
-      }
-    } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-      e.preventDefault();
-      const currentHex = parseInt(hexValue || '000000', 16);
-      const increment = e.key === 'ArrowUp' ? 1 : -1;
-      const newHex = Math.max(0, Math.min(0xffffff, currentHex + increment));
-      const newHexString = newHex.toString(16).padStart(6, '0');
-      setHexValue(newHexString);
-      updateProperty("color", `#${newHexString}`);
-    }
-  };
+    if (e.key === "Enter") {
+      e.preventDefault()
 
-  const handleColorChange = (color: string) => {
-    updateProperty("color", color);
-    setHexValue(color.replace('#', ''));
-  };
+      // Auto-complete only on Enter if single character
+      if (hexValue.length === 1) {
+        const completedHex = hexValue.repeat(6)
+        setHexValue(completedHex)
+        updateProperty("color", `#${completedHex}`)
+      } else if (hexValue.length >= 3) {
+        const paddedHex = hexValue.length < 6 ? hexValue.padEnd(6, "0") : hexValue
+        setHexValue(paddedHex)
+        updateProperty("color", `#${paddedHex}`)
+      }
+    } else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+      e.preventDefault()
+      const currentHex = Number.parseInt(hexValue || "000000", 16)
+      const increment = e.key === "ArrowUp" ? 1 : -1
+      const newHex = Math.max(0, Math.min(0xffffff, currentHex + increment))
+      const newHexString = newHex.toString(16).padStart(6, "0")
+      setHexValue(newHexString)
+      updateProperty("color", `#${newHexString}`)
+    }
+  }
+
+  const handleColorBoxClick = () => {
+    colorInputRef.current?.click()
+  }
+
+  const handleColorPickerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const color = e.target.value
+    const newHex = color.replace("#", "")
+    setHexValue(newHex)
+    updateProperty("color", color)
+  }
 
   React.useEffect(() => {
-    setHexValue(fontProperties.color.replace('#', ''));
-  }, [fontProperties.color]);
+    setHexValue(fontProperties.color.replace("#", ""))
+  }, [fontProperties.color])
 
   return (
     <div className="mb-6 flex place-content-between">
       <Heading>Fill</Heading>
       <div className="space-y-4">
         <div className="relative">
-          <input
-            type="color"
-            value={fontProperties.color}
-            onChange={(e) => handleColorChange(e.target.value)}
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 rounded border-0 cursor-pointer opacity-0"
-          />
-          <div 
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 rounded border border-gray-300 cursor-pointer"
-            style={{ backgroundColor: fontProperties.color }}
-            onClick={() => document.querySelector('input[type="color"]')?.click()}
-          />
-          <span className="absolute left-9 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm font-mono">
-            #
-          </span>
-          <input
-            type="text"
-            value={hexValue}
-            onChange={(e) => handleHexChange(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="w-full bg-background rounded-lg shadow-sm h-10 pl-14 pr-3 font-mono text-sm border-0 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            placeholder="000000"
-            maxLength={6}
-          />
+          <div className="relative flex items-center">
+            <button
+              onClick={handleColorBoxClick}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 w-5 h-5 rounded border border-gray-300 shadow-sm hover:border-gray-400 transition-colors cursor-pointer z-10"
+              style={{ backgroundColor: `#${hexValue}` }}
+            />
+
+            <input
+              ref={colorInputRef}
+              type="color"
+              value={`#${hexValue}`}
+              onChange={handleColorPickerChange}
+              className="absolute opacity-0 pointer-events-none"
+            />
+
+            <span className="absolute left-9 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm font-mono pointer-events-none">
+              #
+            </span>
+            <input
+              type="text"
+              value={hexValue}
+              onChange={(e) => handleHexChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="w-32 bg-white rounded-md shadow-sm h-8 pl-12 pr-3 font-mono text-sm border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:border-blue-500 transition-all"
+              placeholder="000000"
+              maxLength={6}
+            />
+          </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
-// ...existing code...
-
 
 function EffectsSection({ fontProperties, updateProperty }: SectionProps) {
   return (
