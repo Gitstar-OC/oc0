@@ -1,29 +1,43 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AlignLeft, AlignCenter, AlignRight, AlignJustify, Underline, Strikethrough, Minus } from "lucide-react"
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+  Underline,
+  Strikethrough,
+  Minus,
+} from "lucide-react";
 
 interface FontPickerProps {
-  onFontChange?: (properties: FontProperties) => void
+  onFontChange?: (properties: FontProperties) => void;
 }
 
 interface FontProperties {
-  fontFamily: string
-  fontSize: number
-  fontWeight: string
-  lineHeight: number
-  letterSpacing: number
-  textAlign: string
-  textTransform: string
-  textDecoration: string
-  color: string
-  backgroundColor: string
-  textShadow: string
-  strokeWidth: number
-  strokeColor: string
+  fontFamily: string;
+  fontSize: number;
+  fontWeight: string;
+  lineHeight: number;
+  letterSpacing: number;
+  textAlign: string;
+  textTransform: string;
+  textDecoration: string;
+  color: string;
+  backgroundColor: string;
+  textShadow: string;
+  strokeWidth: number;
+  strokeColor: string;
 }
 
 const fontFamilies = [
@@ -37,7 +51,7 @@ const fontFamilies = [
   "Oswald",
   "Raleway",
   "PT Sans",
-]
+];
 
 const fontWeights = [
   { value: "100", label: "Thin" },
@@ -49,7 +63,7 @@ const fontWeights = [
   { value: "700", label: "Bold" },
   { value: "800", label: "Extra Bold" },
   { value: "900", label: "Black" },
-]
+];
 
 export default function FontPicker({ onFontChange }: FontPickerProps) {
   const [fontProperties, setFontProperties] = React.useState<FontProperties>({
@@ -66,45 +80,35 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
     textShadow: "none",
     strokeWidth: 0,
     strokeColor: "#000000",
-  })
+  });
 
   const updateProperty = (key: keyof FontProperties, value: any) => {
-    const updated = { ...fontProperties, [key]: value }
-    setFontProperties(updated)
-    onFontChange?.(updated)
-  }
+    const updated = { ...fontProperties, [key]: value };
+    setFontProperties(updated);
+    onFontChange?.(updated);
+  };
 
   return (
     <div className="w-80 bg-acce rounded-2xl p-8 m-6 shadow-sm">
-      {/* Typography Header */}
-      <div className="mb-12">
-        <h2 className="text-lg font-medium text-gray-900 mb-2">Typography</h2>
-        <div className="w-16 h-0.5 bg-blue-400 border-t-2 border-dashed border-blue-400"></div>
+      <div className="mb-6">
+        <Heading>Typography</Heading>               
 
-        {/* Sample Text */}
-        {/* <div className="mt-8 mb-12">
-          <p
-            className="text-gray-600 text-lg"
-            style={{
-              fontFamily: fontProperties.fontFamily,
-              fontSize: `${Math.max(fontProperties.fontSize, 18)}px`,
-              fontWeight: fontProperties.fontWeight,
-            }}
-          >
-            Display Font!
-          </p>
-        </div> */}
-
-        {/* Typography Controls */}
-        <div className="space-y-6">
+        <div className="space-y-2">
           <div className="grid grid-cols-2 gap-4">
-            <Select value={fontProperties.fontFamily} onValueChange={(value) => updateProperty("fontFamily", value)}>
-              <SelectTrigger className="border-0 bg-white rounded-lg shadow-sm h-10">
+            <Select
+              value={fontProperties.fontFamily}
+              onValueChange={(value) => updateProperty("fontFamily", value)}
+            >
+              <SelectTrigger className="border-0 bg-background rounded-lg shadow-sm h-10">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {fontFamilies.map((font) => (
-                  <SelectItem key={font} value={font} style={{ fontFamily: font }}>
+                  <SelectItem
+                    key={font}
+                    value={font}
+                    style={{ fontFamily: font }}
+                  >
                     {font}
                   </SelectItem>
                 ))}
@@ -114,8 +118,10 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
             <Input
               type="number"
               value={fontProperties.fontSize}
-              onChange={(e) => updateProperty("fontSize", Number.parseInt(e.target.value))}
-              className="border-0 bg-white rounded-lg shadow-sm h-10"
+              onChange={(e) =>
+                updateProperty("fontSize", Number.parseInt(e.target.value))
+              }
+              className="border-0 bg-background rounded-lg shadow-sm h-10"
               placeholder="Size"
               min="8"
               max="200"
@@ -123,8 +129,11 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Select value={fontProperties.fontWeight} onValueChange={(value) => updateProperty("fontWeight", value)}>
-              <SelectTrigger className="border-0 bg-white rounded-lg shadow-sm h-10">
+            <Select
+              value={fontProperties.fontWeight}
+              onValueChange={(value) => updateProperty("fontWeight", value)}
+            >
+              <SelectTrigger className="border-0 bg-background rounded-lg shadow-sm h-10">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -139,8 +148,10 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
             <Input
               type="number"
               value={fontProperties.lineHeight}
-              onChange={(e) => updateProperty("lineHeight", Number.parseFloat(e.target.value))}
-              className="border-0 bg-white rounded-lg shadow-sm h-10"
+              onChange={(e) =>
+                updateProperty("lineHeight", Number.parseFloat(e.target.value))
+              }
+              className="border-0 bg-background rounded-lg shadow-sm h-10"
               placeholder="Line Height"
               min="0.5"
               max="3"
@@ -151,8 +162,10 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
           <Input
             type="number"
             value={fontProperties.letterSpacing}
-            onChange={(e) => updateProperty("letterSpacing", Number.parseFloat(e.target.value))}
-            className="border-0 bg-white rounded-lg shadow-sm h-10"
+            onChange={(e) =>
+              updateProperty("letterSpacing", Number.parseFloat(e.target.value))
+            }
+            className="border-0 bg-background rounded-lg shadow-sm h-10"
             placeholder="Letter Spacing"
             min="-5"
             max="10"
@@ -161,9 +174,9 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
         </div>
       </div>
 
-      {/* Case Section */}
-      <div className="mb-12">
-        <h3 className="text-base font-medium text-gray-900 mb-6">Case</h3>
+      <div className="mb-6">
+        <Heading>Case</Heading>
+
         <div className="flex gap-2">
           {[
             { value: "none", label: "Aa" },
@@ -173,11 +186,15 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
           ].map((caseOption) => (
             <Button
               key={caseOption.value}
-              variant={fontProperties.textTransform === caseOption.value ? "default" : "ghost"}
+              variant={
+                fontProperties.textTransform === caseOption.value
+                  ? "default"
+                  : "ghost"
+              }
               className={`h-10 px-4 rounded-lg ${
                 fontProperties.textTransform === caseOption.value
                   ? "bg-blue-500 text-white shadow-sm"
-                  : "bg-white text-gray-700 shadow-sm hover:bg-gray-50"
+                  : "bg-background text-gray-700 shadow-sm hover:bg-gray-50"
               }`}
               onClick={() => updateProperty("textTransform", caseOption.value)}
             >
@@ -187,9 +204,8 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
         </div>
       </div>
 
-      {/* Alignment Section */}
-      <div className="mb-12">
-        <h3 className="text-base font-medium text-gray-900 mb-6">Alignment</h3>
+      <div className="mb-6">
+        <Heading>Alignment</Heading>
         <div className="flex gap-2">
           {[
             { value: "left", icon: AlignLeft },
@@ -203,7 +219,7 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
               className={`h-10 w-10 p-0 rounded-lg ${
                 fontProperties.textAlign === align.value
                   ? "bg-blue-500 text-white shadow-sm"
-                  : "bg-white text-gray-700 shadow-sm hover:bg-gray-50"
+                  : "bg-background text-gray-700 shadow-sm hover:bg-gray-50"
               }`}
               onClick={() => updateProperty("textAlign", align.value)}
             >
@@ -213,9 +229,8 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
         </div>
       </div>
 
-      {/* Decoration Section */}
-      <div className="mb-12">
-        <h3 className="text-base font-medium text-gray-900 mb-6">Decoration</h3>
+      <div className="mb-6">
+        <Heading>Decoration</Heading>
         <div className="flex gap-2">
           {[
             { value: "none", icon: Minus },
@@ -228,7 +243,7 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
               className={`h-10 w-10 p-0 rounded-lg ${
                 fontProperties.textDecoration === decoration.value
                   ? "bg-blue-500 text-white shadow-sm"
-                  : "bg-white text-gray-700 shadow-sm hover:bg-gray-50"
+                  : "bg-background text-gray-700 shadow-sm hover:bg-gray-50"
               }`}
               onClick={() => updateProperty("textDecoration", decoration.value)}
             >
@@ -238,9 +253,8 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
         </div>
       </div>
 
-      {/* Fill Section */}
-      <div className="mb-12">
-        <h3 className="text-base font-medium text-gray-900 mb-6">Fill</h3>
+      <div className="mb-6">
+        <Heading>Fill</Heading>     
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <input
@@ -252,18 +266,20 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
             <Input
               value={fontProperties.color}
               onChange={(e) => updateProperty("color", e.target.value)}
-              className="border-0 bg-white rounded-lg shadow-sm h-10 flex-1"
+              className="border-0 bg-background rounded-lg shadow-sm h-10 flex-1"
               placeholder="Text Color"
             />
           </div>
         </div>
       </div>
 
-      {/* Effects Section */}
-      <div className="mb-12">
-        <h3 className="text-base font-medium text-gray-900 mb-6">Effects</h3>
-        <Select value={fontProperties.textShadow} onValueChange={(value) => updateProperty("textShadow", value)}>
-          <SelectTrigger className="border-0 bg-white rounded-lg shadow-sm h-10">
+      <div className="mb-4">
+        <Heading>Effects</Heading>
+        <Select
+          value={fontProperties.textShadow}
+          onValueChange={(value) => updateProperty("textShadow", value)}
+        >
+          <SelectTrigger className="border-0 bg-background rounded-lg shadow-sm h-10">
             <SelectValue placeholder="Text Shadow" />
           </SelectTrigger>
           <SelectContent>
@@ -275,15 +291,16 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
         </Select>
       </div>
 
-      {/* Stroke Section */}
       <div>
-        <h3 className="text-base font-medium text-gray-900 mb-6">Stroke</h3>
+        <Heading>Stroke</Heading>       
         <div className="space-y-4">
           <Input
             type="number"
             value={fontProperties.strokeWidth}
-            onChange={(e) => updateProperty("strokeWidth", Number.parseFloat(e.target.value))}
-            className="border-0 bg-white rounded-lg shadow-sm h-10"
+            onChange={(e) =>
+              updateProperty("strokeWidth", Number.parseFloat(e.target.value))
+            }
+            className="border-0 bg-background rounded-lg shadow-sm h-10"
             placeholder="Stroke Width"
             min="0"
             max="5"
@@ -299,12 +316,18 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
             <Input
               value={fontProperties.strokeColor}
               onChange={(e) => updateProperty("strokeColor", e.target.value)}
-              className="border-0 bg-white rounded-lg shadow-sm h-10 flex-1"
+              className="border-0 bg-background rounded-lg shadow-sm h-10 flex-1"
               placeholder="Stroke Color"
             />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
+}
+
+function Heading({ children }: { children: React.ReactNode }) {
+  return (
+    <h3 className="text-base font-medium text-primary mb-6">{children}</h3>
+  );
 }
