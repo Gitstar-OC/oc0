@@ -222,7 +222,7 @@ function CaseSection({ fontProperties, updateProperty }: SectionProps) {
                 ? "default"
                 : "ghost"
             }
-            className={`h-10 px-3 rounded-lg ${
+            className={`h-8 w-8 rounded-md ${
               fontProperties.textTransform === caseOption.value
                 ? "bg-blue-500 text-white shadow-sm"
                 : "bg-background text-gray-700 shadow-sm hover:bg-gray-50"
@@ -251,7 +251,7 @@ function AlignmentSection({ fontProperties, updateProperty }: SectionProps) {
           <Button
             key={align.value}
             variant="ghost"
-            className={`h-10 w-10 p-0 rounded-lg ${
+            className={`h-8 w-8 rounded-md ${
               fontProperties.textAlign === align.value
                 ? "bg-blue-500 text-white shadow-sm"
                 : "bg-background text-gray-700 shadow-sm hover:bg-gray-50"
@@ -279,7 +279,7 @@ function DecorationSection({ fontProperties, updateProperty }: SectionProps) {
           <Button
             key={decoration.value}
             variant="ghost"
-            className={`h-10 w-10 p-0 rounded-lg ${
+            className={`h-8 w-8 rounded-md ${
               fontProperties.textDecoration === decoration.value
                 ? "bg-blue-500 text-white shadow-sm"
                 : "bg-background text-gray-700 shadow-sm hover:bg-gray-50"
