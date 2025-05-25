@@ -114,7 +114,7 @@ type SectionProps = {
 
 function TypographySection({ fontProperties, updateProperty }: SectionProps) {
   return (
-    <div className="mb-6">
+    <div className="mb-8">
       <Heading>Typography</Heading>
       <div className="space-y-2">
         {/* Full width font family select */}
@@ -206,7 +206,7 @@ function TypographySection({ fontProperties, updateProperty }: SectionProps) {
 
 function CaseSection({ fontProperties, updateProperty }: SectionProps) {
   return (
-    <div className="mb-6 flex place-content-between">
+    <div className="mb-3 flex place-content-between">
       <Heading>Case</Heading>
       <div className="flex gap-2">
         {[
@@ -239,7 +239,7 @@ function CaseSection({ fontProperties, updateProperty }: SectionProps) {
 
 function AlignmentSection({ fontProperties, updateProperty }: SectionProps) {
   return (
-    <div className="mb-6 flex place-content-between">
+    <div className="mb-3 flex place-content-between">
       <Heading>Alignment</Heading>
       <div className="flex gap-2">
         {[
@@ -294,29 +294,87 @@ function DecorationSection({ fontProperties, updateProperty }: SectionProps) {
   );
 }
 
+// ...existing code...
 function FillSection({ fontProperties, updateProperty }: SectionProps) {
+  const [hexValue, setHexValue] = React.useState(fontProperties.color.replace('#', ''));
+
+  const handleHexChange = (value: string) => {
+    // Remove any non-hex characters
+    let cleanValue = value.replace(/[^0-9a-fA-F]/g, '').toLowerCase();
+    
+    // Only auto-repeat if it's a single character AND the input is being typed (not backspaced)
+    if (cleanValue.length === 1 && value.length === 1) {
+      cleanValue = cleanValue.repeat(6);
+    }
+    
+    // Limit to 6 characters
+    cleanValue = cleanValue.slice(0, 6);
+    setHexValue(cleanValue);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (hexValue.length >= 3) {
+        const paddedHex = hexValue.length < 6 ? hexValue.padEnd(6, '0') : hexValue;
+        setHexValue(paddedHex);
+        updateProperty("color", `#${paddedHex}`);
+      }
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      const currentHex = parseInt(hexValue || '000000', 16);
+      const increment = e.key === 'ArrowUp' ? 1 : -1;
+      const newHex = Math.max(0, Math.min(0xffffff, currentHex + increment));
+      const newHexString = newHex.toString(16).padStart(6, '0');
+      setHexValue(newHexString);
+      updateProperty("color", `#${newHexString}`);
+    }
+  };
+
+  const handleColorChange = (color: string) => {
+    updateProperty("color", color);
+    setHexValue(color.replace('#', ''));
+  };
+
+  React.useEffect(() => {
+    setHexValue(fontProperties.color.replace('#', ''));
+  }, [fontProperties.color]);
+
   return (
     <div className="mb-6 flex place-content-between">
       <Heading>Fill</Heading>
       <div className="space-y-4">
-        <div className="flex items-center gap-3">
+        <div className="relative">
           <input
             type="color"
             value={fontProperties.color}
-            onChange={(e) => updateProperty("color", e.target.value)}
-            className="w-10 h-10 rounded-2xl border-0 shadow-sm cursor-pointer"
+            onChange={(e) => handleColorChange(e.target.value)}
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 rounded border-0 cursor-pointer opacity-0"
           />
-          <Input
-            value={fontProperties.color}
-            onChange={(e) => updateProperty("color", e.target.value)}
-            className="border-0 bg-background rounded-lg shadow-sm h-10 flex-1"
-            placeholder="Text Color"
+          <div 
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 rounded border border-gray-300 cursor-pointer"
+            style={{ backgroundColor: fontProperties.color }}
+            onClick={() => document.querySelector('input[type="color"]')?.click()}
+          />
+          <span className="absolute left-9 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm font-mono">
+            #
+          </span>
+          <input
+            type="text"
+            value={hexValue}
+            onChange={(e) => handleHexChange(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="w-full bg-background rounded-lg shadow-sm h-10 pl-14 pr-3 font-mono text-sm border-0 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            placeholder="000000"
+            maxLength={6}
           />
         </div>
       </div>
     </div>
   );
 }
+// ...existing code...
+
 
 function EffectsSection({ fontProperties, updateProperty }: SectionProps) {
   return (
