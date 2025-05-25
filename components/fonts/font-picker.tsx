@@ -89,7 +89,7 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
   };
 
   return (
-    <div className="w-80 bg-acce rounded-2xl p-8 m-6 shadow-sm">
+    <div className="w-80 bg-primary-foreground rounded-2xl p-8 m-6 shadow-sm">
       <div className="mb-6">
         <Heading>Typography</Heading>               
 
