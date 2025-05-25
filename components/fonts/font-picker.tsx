@@ -134,7 +134,6 @@ function TypographySection({ fontProperties, updateProperty }: SectionProps) {
           </SelectContent>
         </Select>
 
-        {/* 6 inputs in 3 rows of 2 columns each */}
         <div className="grid grid-cols-2 gap-2">
           <Input
             type="number"
@@ -152,7 +151,7 @@ function TypographySection({ fontProperties, updateProperty }: SectionProps) {
             value={fontProperties.fontWeight}
             onValueChange={(value) => updateProperty("fontWeight", value)}
           >
-            <SelectTrigger className="border-0 bg-background rounded-lg shadow-sm h-10">
+            <SelectTrigger className="border-0 bg-background w-full rounded-lg shadow-sm h-10">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
