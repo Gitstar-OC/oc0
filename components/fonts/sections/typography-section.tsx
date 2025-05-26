@@ -60,7 +60,6 @@ export function TypographySection({
   const [selectedFont, setSelectedFont] = useState<GoogleFont | null>(null);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [fontOpen, setFontOpen] = useState(false);
-  const [customFontSize, setCustomFontSize] = useState(false);
 
   const GOOGLE_FONTS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_FONTS_API_KEY || "YOUR_API_KEY";
 
@@ -154,18 +153,18 @@ export function TypographySection({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <Heading>Typography</Heading>
 
       {/* Font Family - Full Width with Combobox */}
-      <div className="w-full">
+      <div className="w-full mt-4">
         <Popover open={fontOpen} onOpenChange={setFontOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               role="combobox"
               aria-expanded={fontOpen}
-              className="w-full h-10 justify-between border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
+              className="w-full h-8 justify-between border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
               onClick={() => {
                 if (!fontsLoaded) {
                   fetchGoogleFonts();
@@ -173,14 +172,25 @@ export function TypographySection({
               }}
             >
               {fontProperties.fontFamily || "Select font family..."}
-              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              <ChevronsUpDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-full p-0" align="start">
+          <PopoverContent 
+            className="w-80 p-0" 
+            align="end"
+            side="right"
+            sideOffset={8}
+            style={{
+              '--scrollbar-width': '6px',
+              '--scrollbar-track': 'transparent',
+              '--scrollbar-thumb': 'hsl(var(--border))',
+              '--scrollbar-thumb-hover': 'hsl(var(--muted-foreground))',
+            } as React.CSSProperties}
+          >
             <Command>
-              <CommandInput placeholder="Search fonts..." />
-              <CommandList>
-                <CommandEmpty>
+              <CommandInput placeholder="Search fonts..." className="h-8 text-xs" />
+              <CommandList className="max-h-48 overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-muted-foreground">
+                <CommandEmpty className="py-4 text-xs">
                   {loading ? "Loading fonts..." : "No font found."}
                 </CommandEmpty>
                 <CommandGroup>
@@ -190,19 +200,15 @@ export function TypographySection({
                       value={font.family}
                       onSelect={handleFontChange}
                       style={{ fontFamily: font.family }}
+                      className="text-xs py-2"
                     >
                       <Check
                         className={cn(
-                          "mr-2 h-4 w-4",
+                          "mr-2 h-3 w-3",
                           fontProperties.fontFamily === font.family ? "opacity-100" : "opacity-0"
                         )}
                       />
-                      <div className="flex justify-between items-center w-full">
-                        <span>{font.family}</span>
-                        <span className="text-xs text-muted-foreground capitalize">
-                          {font.category}
-                        </span>
-                      </div>
+                      <span>{font.family}</span>
                     </CommandItem>
                   ))}
                 </CommandGroup>
@@ -213,43 +219,38 @@ export function TypographySection({
       </div>
 
       {/* Grid with consistent heights and widths */}
-      <div className="grid grid-cols-2 gap-3">
-        {/* Font Size - Combined Dropdown and Input */}
-        <div className="flex gap-2">
+      <div className="grid grid-cols-2 gap-2">
+        {/* Font Size - Combined Input and Dropdown */}
+        <div className="flex gap-1">
+          <Input
+            type="number"
+            value={fontProperties.fontSize}
+            onChange={(e) => updateProperty("fontSize", Number.parseInt(e.target.value) || 16)}
+            className="h-8 flex-1 border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
+            min="1"
+            max="500"
+            placeholder="Size"
+          />
           <Select
-            value={customFontSize ? "custom" : fontProperties.fontSize.toString()}
-            onValueChange={(value) => {
-              if (value === "custom") {
-                setCustomFontSize(true);
-              } else {
-                setCustomFontSize(false);
-                updateProperty("fontSize", Number.parseInt(value));
-              }
-            }}
+            value={fontProperties.fontSize.toString()}
+            onValueChange={(value) => updateProperty("fontSize", Number.parseInt(value))}
           >
-            <SelectTrigger className="h-10 flex-1 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring">
-              <SelectValue placeholder="Size" />
+            <SelectTrigger className="h-8 w-8 border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring p-1">
+              <ChevronsUpDown className="h-3 w-3" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent 
+              align="end" 
+              side="right" 
+              sideOffset={4}
+              className="w-20"
+            >
               {fontSizes.map((size) => (
-                <SelectItem key={size} value={size.toString()}>
+                <SelectItem key={size} value={size.toString()} className="text-xs">
                   {size}px
                 </SelectItem>
               ))}
-              <SelectItem value="custom">Custom</SelectItem>
             </SelectContent>
           </Select>
-          
-          {customFontSize && (
-            <Input
-              type="number"
-              value={fontProperties.fontSize}
-              onChange={(e) => updateProperty("fontSize", Number.parseInt(e.target.value) || 16)}
-              className="h-10 w-20 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
-              min="1"
-              max="500"
-            />
-          )}
         </div>
 
         {/* Font Weight */}
@@ -259,12 +260,16 @@ export function TypographySection({
             onValueChange={(value) => updateProperty("fontWeight", value)}
             disabled={!selectedFont}
           >
-            <SelectTrigger className="h-10 w-full border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring">
+            <SelectTrigger className="h-8 w-full border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring">
               <SelectValue placeholder="Weight" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent 
+              align="end" 
+              side="right" 
+              sideOffset={4}
+            >
               {getAvailableWeights().map((weight) => (
-                <SelectItem key={`weight-${weight.value}`} value={weight.value}>
+                <SelectItem key={`weight-${weight.value}`} value={weight.value} className="text-xs">
                   {weight.label}
                 </SelectItem>
               ))}
@@ -274,14 +279,14 @@ export function TypographySection({
 
         {/* Line Height */}
         <div className="relative">
-          <LineChart className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <LineChart className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
           <Input
             type="number"
             value={fontProperties.lineHeight}
             onChange={(e) =>
               updateProperty("lineHeight", Number.parseFloat(e.target.value) || 1.5)
             }
-            className="h-10 w-full pl-10 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
+            className="h-8 w-full pl-7 border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
             placeholder="Line height"
             min="0.5"
             max="3"
@@ -291,14 +296,14 @@ export function TypographySection({
 
         {/* Letter Spacing */}
         <div className="relative">
-          <Type className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Type className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
           <Input
             type="number"
             value={fontProperties.letterSpacing}
             onChange={(e) =>
               updateProperty("letterSpacing", Number.parseFloat(e.target.value) || 0)
             }
-            className="h-10 w-full pl-10 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
+            className="h-8 w-full pl-7 border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
             placeholder="Letter spacing"
             min="-5"
             max="10"
