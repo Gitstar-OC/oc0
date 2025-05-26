@@ -2,8 +2,8 @@
 
 import * as React from "react"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select-with-preview"
-import { popularGoogleFonts } from "@/lib/google-fonts"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { popularGoogleFonts } from "@/lib/fonts"
 import {
   AlignLeft,
   AlignCenter,
@@ -95,7 +95,7 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
   }, [])
 
   return (
-    <div className="w-80 bg-background rounded-2xl p-6 m-6 border">
+    <div className="w-80 bg-accent rounded-2xl p-6 m-6 border">
       <TypographySection fontProperties={fontProperties} updateProperty={updateProperty} />
 
       {/* Separator */}
@@ -135,7 +135,7 @@ function TypographySection({ fontProperties, updateProperty }: SectionProps) {
 
       {/* Font Family - Full width */}
       <Select value={fontProperties.fontFamily} onValueChange={(value) => updateProperty("fontFamily", value)}>
-        <SelectTrigger className="w-full h-8 border bg-accent rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring">
+        <SelectTrigger className="w-full h-8 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring">
           <SelectValue placeholder="Select font" />
         </SelectTrigger>
         <SelectContent className="max-h-60">
@@ -153,14 +153,14 @@ function TypographySection({ fontProperties, updateProperty }: SectionProps) {
           type="number"
           value={fontProperties.fontSize}
           onChange={(e) => updateProperty("fontSize", Number.parseInt(e.target.value) || 16)}
-          className="h-8 border bg-accent rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
+          className="h-8 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
           placeholder="Size"
           min="8"
           max="200"
         />
 
         <Select value={fontProperties.fontWeight} onValueChange={(value) => updateProperty("fontWeight", value)}>
-          <SelectTrigger className="h-8 border bg-accent rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring">
+          <SelectTrigger className="h-8 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring">
             <SelectValue placeholder="Weight" />
           </SelectTrigger>
           <SelectContent>
@@ -178,7 +178,7 @@ function TypographySection({ fontProperties, updateProperty }: SectionProps) {
         value={fontProperties.fontSize.toString()}
         onValueChange={(value) => updateProperty("fontSize", Number.parseInt(value))}
       >
-        <SelectTrigger className="h-8 border bg-accent rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring">
+        <SelectTrigger className="h-8 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring">
           <SelectValue placeholder="Size presets" />
         </SelectTrigger>
         <SelectContent>
@@ -198,7 +198,7 @@ function TypographySection({ fontProperties, updateProperty }: SectionProps) {
             type="number"
             value={fontProperties.lineHeight}
             onChange={(e) => updateProperty("lineHeight", Number.parseFloat(e.target.value) || 1.5)}
-            className="h-8 pl-10 border bg-accent rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
+            className="h-8 pl-10 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
             placeholder="Line Height"
             min="0.5"
             max="3"
@@ -212,7 +212,7 @@ function TypographySection({ fontProperties, updateProperty }: SectionProps) {
             type="number"
             value={fontProperties.letterSpacing}
             onChange={(e) => updateProperty("letterSpacing", Number.parseFloat(e.target.value) || 0)}
-            className="h-8 pl-10 border bg-accent rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
+            className="h-8 pl-10 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
             placeholder="Letter Spacing"
             min="-5"
             max="10"
@@ -236,7 +236,7 @@ function CaseSection({ fontProperties, updateProperty }: SectionProps) {
     <div className="mb-3">
       <div className="flex items-center justify-between">
         <Heading>Case</Heading>
-        <div className="bg-muted rounded-lg p-0.5 flex">
+        <div className="bg-primary-foreground rounded-lg p-0.5 flex">
           {caseOptions.map((caseOption) => (
             <button
               key={caseOption.value}
@@ -268,7 +268,7 @@ function AlignmentSection({ fontProperties, updateProperty }: SectionProps) {
     <div className="mb-3">
       <div className="flex items-center justify-between">
         <Heading>Alignment</Heading>
-        <div className="bg-muted rounded-lg p-0.5 flex">
+        <div className="bg-primary-foreground rounded-lg p-0.5 flex">
           {alignOptions.map((align) => (
             <button
               key={align.value}
@@ -299,7 +299,7 @@ function DecorationSection({ fontProperties, updateProperty }: SectionProps) {
     <div className="mb-3">
       <div className="flex items-center justify-between">
         <Heading>Decoration</Heading>
-        <div className="bg-muted rounded-lg p-0.5 flex">
+        <div className="bg-primary-foreground rounded-lg p-0.5 flex">
           {decorationOptions.map((decoration) => (
             <button
               key={decoration.value}
@@ -395,7 +395,7 @@ function FillSection({ fontProperties, updateProperty }: SectionProps) {
               value={hexValue}
               onChange={(e) => handleHexChange(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-32 bg-accent rounded-lg h-8 pl-10 pr-2 text-xs border focus:ring-1 focus:ring-ring focus:outline-none focus:border-ring transition-all"
+              className="w-32 bg-background rounded-lg h-8 pl-10 pr-2 text-xs border focus:ring-1 focus:ring-ring focus:outline-none focus:border-ring transition-all"
               placeholder="000000"
               maxLength={6}
               style={{
@@ -416,7 +416,7 @@ function EffectsSection({ fontProperties, updateProperty }: SectionProps) {
       <div className="flex items-center justify-between">
         <Heading>Effects</Heading>
         <Select value={fontProperties.textShadow} onValueChange={(value) => updateProperty("textShadow", value)}>
-          <SelectTrigger className="w-32 h-8 border bg-accent rounded-lg text-xs focus:ring-1 focus:ring-ring focus:border-ring">
+          <SelectTrigger className="w-32 h-8 border bg-background rounded-lg text-xs focus:ring-1 focus:ring-ring focus:border-ring">
             <SelectValue placeholder="None" />
           </SelectTrigger>
           <SelectContent>
@@ -440,7 +440,7 @@ function StrokeSection({ fontProperties, updateProperty }: SectionProps) {
           type="number"
           value={fontProperties.strokeWidth}
           onChange={(e) => updateProperty("strokeWidth", Number.parseFloat(e.target.value) || 0)}
-          className="h-8 border bg-accent rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
+          className="h-8 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
           placeholder="Stroke Width"
           min="0"
           max="5"
@@ -456,7 +456,7 @@ function StrokeSection({ fontProperties, updateProperty }: SectionProps) {
           <Input
             value={fontProperties.strokeColor}
             onChange={(e) => updateProperty("strokeColor", e.target.value)}
-            className="h-8 border bg-accent rounded-lg text-sm flex-1 focus:ring-1 focus:ring-ring focus:border-ring"
+            className="h-8 border bg-background rounded-lg text-sm flex-1 focus:ring-1 focus:ring-ring focus:border-ring"
             placeholder="Stroke Color"
           />
         </div>
