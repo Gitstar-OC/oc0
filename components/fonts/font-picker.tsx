@@ -82,18 +82,6 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
   )
 }
 
-function Heading({ children }: { children: React.ReactNode }) {
-  return <h3 className="text-sm font-medium text-primary mb-2">{children}</h3>
-}
-
-type SectionProps = {
-  fontProperties: FontProperties
-  updateProperty: (key: keyof FontProperties, value: any) => void
-}
-
-
-
-
 
 
 
