@@ -133,7 +133,6 @@ function TypographySection({ fontProperties, updateProperty }: SectionProps) {
     <div className="space-y-3">
       <Heading>Typography</Heading>
 
-      {/* Font Family - Full width */}
       <Select value={fontProperties.fontFamily} onValueChange={(value) => updateProperty("fontFamily", value)}>
         <SelectTrigger className="w-full h-8 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring">
           <SelectValue placeholder="Select font" />
