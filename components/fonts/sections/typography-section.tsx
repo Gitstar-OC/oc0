@@ -8,7 +8,7 @@ import {
   SelectValue,
   type SectionProps,
 } from "../shared-components";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { LineChart, Type, Check, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -316,7 +316,6 @@ export function TypographySection({
           />
         </div>
 
-        {/* Letter Spacing */}
         <div className="relative">
           <Type className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
           <Input
