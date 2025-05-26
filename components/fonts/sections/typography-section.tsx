@@ -9,7 +9,7 @@ import {
   type SectionProps,
 } from "../shared-components";
 import { useState, useEffect, useMemo } from "react";
-import { LineChart, Type, Check, ChevronsUpDown } from "lucide-react";
+import { LineChart, Type, Check, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -39,14 +39,14 @@ interface GoogleFontsResponse {
 
 // Popular fonts as fallback and initial options
 const popularFonts: GoogleFont[] = [
-  { family: "Inter", variants: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], subsets: ["latin"], category: "sans-serif" },
-  { family: "Roboto", variants: ["100", "300", "400", "500", "700", "900"], subsets: ["latin"], category: "sans-serif" },
-  { family: "Open Sans", variants: ["300", "400", "500", "600", "700", "800"], subsets: ["latin"], category: "sans-serif" },
-  { family: "Lato", variants: ["100", "300", "400", "700", "900"], subsets: ["latin"], category: "sans-serif" },
-  { family: "Montserrat", variants: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], subsets: ["latin"], category: "sans-serif" },
-  { family: "Poppins", variants: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], subsets: ["latin"], category: "sans-serif" },
-  { family: "Source Sans Pro", variants: ["200", "300", "400", "600", "700", "900"], subsets: ["latin"], category: "sans-serif" },
-  { family: "Nunito", variants: ["200", "300", "400", "500", "600", "700", "800", "900"], subsets: ["latin"], category: "sans-serif" },
+  { family: "Inter", variants: ["100", "200", "300", "400", "500", "600", "700", "800", "900", "100italic", "200italic", "300italic", "400italic", "500italic", "600italic", "700italic", "800italic", "900italic"], subsets: ["latin"], category: "sans-serif" },
+  { family: "Roboto", variants: ["100", "300", "400", "500", "700", "900", "100italic", "300italic", "400italic", "500italic", "700italic", "900italic"], subsets: ["latin"], category: "sans-serif" },
+  { family: "Open Sans", variants: ["300", "400", "500", "600", "700", "800", "300italic", "400italic", "500italic", "600italic", "700italic", "800italic"], subsets: ["latin"], category: "sans-serif" },
+  { family: "Lato", variants: ["100", "300", "400", "700", "900", "100italic", "300italic", "400italic", "700italic", "900italic"], subsets: ["latin"], category: "sans-serif" },
+  { family: "Montserrat", variants: ["100", "200", "300", "400", "500", "600", "700", "800", "900", "100italic", "200italic", "300italic", "400italic", "500italic", "600italic", "700italic", "800italic", "900italic"], subsets: ["latin"], category: "sans-serif" },
+  { family: "Poppins", variants: ["100", "200", "300", "400", "500", "600", "700", "800", "900", "100italic", "200italic", "300italic", "400italic", "500italic", "600italic", "700italic", "800italic", "900italic"], subsets: ["latin"], category: "sans-serif" },
+  { family: "Source Sans Pro", variants: ["200", "300", "400", "600", "700", "900", "200italic", "300italic", "400italic", "600italic", "700italic", "900italic"], subsets: ["latin"], category: "sans-serif" },
+  { family: "Nunito", variants: ["200", "300", "400", "500", "600", "700", "800", "900", "200italic", "300italic", "400italic", "500italic", "600italic", "700italic", "800italic", "900italic"], subsets: ["latin"], category: "sans-serif" },
 ];
 
 const fontSizes = [8, 9, 10, 11, 12, 14, 15, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72];
@@ -60,6 +60,7 @@ export function TypographySection({
   const [selectedFont, setSelectedFont] = useState<GoogleFont | null>(null);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [fontOpen, setFontOpen] = useState(false);
+  const [sizeOpen, setSizeOpen] = useState(false);
 
   const GOOGLE_FONTS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_FONTS_API_KEY || "YOUR_API_KEY";
 
@@ -80,8 +81,8 @@ export function TypographySection({
       );
       const data: GoogleFontsResponse = await response.json();
       if (data.items && data.items.length > 0) {
-        // Only take first 200 fonts for performance
-        setGoogleFonts(data.items.slice(0, 200));
+        // Take all fonts for complete list
+        setGoogleFonts(data.items);
         setFontsLoaded(true);
       }
     } catch (error) {
@@ -91,26 +92,12 @@ export function TypographySection({
     }
   };
 
-  // Memoized font display list for performance
-  const displayFonts = useMemo(() => {
-    if (!selectedFont) return googleFonts.slice(0, 8);
-    
-    const selectedIndex = googleFonts.findIndex(f => f.family === selectedFont.family);
-    if (selectedIndex === -1) return googleFonts.slice(0, 8);
-    
-    // Show 4 fonts before and 4 fonts after selected font
-    const start = Math.max(0, selectedIndex - 4);
-    const end = Math.min(googleFonts.length, selectedIndex + 5);
-    
-    return googleFonts.slice(start, end);
-  }, [selectedFont, googleFonts]);
-
   const loadGoogleFont = (fontFamily: string) => {
     const existingLink = document.querySelector(`link[href*="${fontFamily.replace(/ /g, '+')}"]`);
     if (existingLink) return;
 
     const link = document.createElement("link");
-    link.href = `https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, "+")}:wght@300;400;500;600;700&display=swap`;
+    link.href = `https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, "+")}:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap`;
     link.rel = "stylesheet";
     document.head.appendChild(link);
   };
@@ -136,20 +123,47 @@ export function TypographySection({
       "900": "Black",
     };
 
-    const uniqueWeights = new Map<string, { value: string; label: string }>();
+    const weights: { value: string; label: string }[] = [];
+    const processedWeights = new Set<string>();
 
     selectedFont.variants.forEach((variant) => {
-      let value = variant === "regular" ? "400" : variant.replace(/italic/g, "");
-      
-      if (value && weightMap[value] && !uniqueWeights.has(value)) {
-        uniqueWeights.set(value, {
-          value,
-          label: weightMap[value],
+      let weight = variant;
+      let isItalic = false;
+
+      if (variant.includes('italic')) {
+        isItalic = true;
+        weight = variant.replace('italic', '') || '400';
+      }
+
+      if (variant === "regular") {
+        weight = "400";
+      }
+
+      if (weightMap[weight] && !processedWeights.has(weight)) {
+        processedWeights.add(weight);
+        weights.push({
+          value: weight,
+          label: weightMap[weight],
+        });
+      }
+
+      if (isItalic && weightMap[weight] && !processedWeights.has(weight + 'italic')) {
+        processedWeights.add(weight + 'italic');
+        weights.push({
+          value: weight + 'italic',
+          label: `${weightMap[weight]} Italic`,
         });
       }
     });
 
-    return Array.from(uniqueWeights.values()).sort((a, b) => Number.parseInt(a.value) - Number.parseInt(b.value));
+    return weights.sort((a, b) => {
+      const aWeight = parseInt(a.value.replace('italic', ''));
+      const bWeight = parseInt(b.value.replace('italic', ''));
+      if (aWeight === bWeight) {
+        return a.value.includes('italic') ? 1 : -1;
+      }
+      return aWeight - bWeight;
+    });
   };
 
   return (
@@ -157,7 +171,7 @@ export function TypographySection({
       <Heading>Typography</Heading>
 
       {/* Font Family - Full Width with Combobox */}
-      <div className="w-full mt-4">
+      <div className="w-full">
         <Popover open={fontOpen} onOpenChange={setFontOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -172,29 +186,23 @@ export function TypographySection({
               }}
             >
               {fontProperties.fontFamily || "Select font family..."}
-              <ChevronsUpDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
+              <ChevronDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
           <PopoverContent 
-            className="w-80 p-0" 
-            align="end"
-            side="right"
-            sideOffset={8}
-            style={{
-              '--scrollbar-width': '6px',
-              '--scrollbar-track': 'transparent',
-              '--scrollbar-thumb': 'hsl(var(--border))',
-              '--scrollbar-thumb-hover': 'hsl(var(--muted-foreground))',
-            } as React.CSSProperties}
+            className="w-[300px] p-0" 
+            align="start"
+            side="bottom"
+            sideOffset={4}
           >
             <Command>
               <CommandInput placeholder="Search fonts..." className="h-8 text-xs" />
-              <CommandList className="max-h-48 overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-muted-foreground">
-                <CommandEmpty className="py-4 text-xs">
+              <CommandList className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border scrollbar-thumb-rounded-full hover:scrollbar-thumb-muted-foreground">
+                <CommandEmpty className="py-4 text-xs px-4">
                   {loading ? "Loading fonts..." : "No font found."}
                 </CommandEmpty>
                 <CommandGroup>
-                  {(loading ? displayFonts : googleFonts).map((font) => (
+                  {googleFonts.map((font) => (
                     <CommandItem
                       key={font.family}
                       value={font.family}
@@ -220,37 +228,51 @@ export function TypographySection({
 
       {/* Grid with consistent heights and widths */}
       <div className="grid grid-cols-2 gap-2">
-        {/* Font Size - Combined Input and Dropdown */}
-        <div className="flex gap-1">
+        {/* Font Size - Joined Input and Dropdown */}
+        <div className="relative">
           <Input
             type="number"
             value={fontProperties.fontSize}
             onChange={(e) => updateProperty("fontSize", Number.parseInt(e.target.value) || 16)}
-            className="h-8 flex-1 border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
+            className="h-8 w-full pr-8 border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
             min="1"
             max="500"
             placeholder="Size"
           />
-          <Select
-            value={fontProperties.fontSize.toString()}
-            onValueChange={(value) => updateProperty("fontSize", Number.parseInt(value))}
-          >
-            <SelectTrigger className="h-8 w-8 border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring p-1">
-              <ChevronsUpDown className="h-3 w-3" />
-            </SelectTrigger>
-            <SelectContent 
-              align="end" 
-              side="right" 
+          <Popover open={sizeOpen} onOpenChange={setSizeOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-muted"
+              >
+                <ChevronDown className="h-3 w-3" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent 
+              className="w-20 p-1" 
+              align="end"
+              side="bottom"
               sideOffset={4}
-              className="w-20"
             >
-              {fontSizes.map((size) => (
-                <SelectItem key={size} value={size.toString()} className="text-xs">
-                  {size}px
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+              <div className="max-h-32 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border scrollbar-thumb-rounded-full">
+                {fontSizes.map((size) => (
+                  <Button
+                    key={size}
+                    variant="ghost"
+                    size="sm"
+                    className="w-full h-6 text-xs justify-start px-2"
+                    onClick={() => {
+                      updateProperty("fontSize", size);
+                      setSizeOpen(false);
+                    }}
+                  >
+                    {size}px
+                  </Button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
 
         {/* Font Weight */}
@@ -264,8 +286,8 @@ export function TypographySection({
               <SelectValue placeholder="Weight" />
             </SelectTrigger>
             <SelectContent 
-              align="end" 
-              side="right" 
+              align="start"
+              side="bottom"
               sideOffset={4}
             >
               {getAvailableWeights().map((weight) => (
