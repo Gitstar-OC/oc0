@@ -16,6 +16,7 @@ import {
   CommandEmpty,
   CommandInput,
   CommandList,
+  CommandItem,
 } from "@/components/ui/command";
 import {
   Popover,
@@ -23,7 +24,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 
 interface GoogleFont {
   family: string;
@@ -286,6 +286,22 @@ export function TypographySection({
     setSearchTerm("");
   };
 
+  useEffect(() => {
+    if (fontOpen && fontProperties.fontFamily) {
+      setTimeout(() => {
+        const selectedElement = document.querySelector(
+          `[data-font-family="${fontProperties.fontFamily}"]`
+        );
+        if (selectedElement) {
+          selectedElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }, 100);
+    }
+  }, [fontOpen, fontProperties.fontFamily]);
+
   const getAvailableWeights = () => {
     if (!selectedFont) return [];
     const weightMap: { [key: string]: string } = {
@@ -367,41 +383,32 @@ export function TypographySection({
                 value={searchTerm}
                 onValueChange={(val) => setSearchTerm(val)}
               />
-              <CommandList>
+              <CommandList className="max-h-[200px]">
                 {filteredFonts.length === 0 ? (
                   <CommandEmpty className="py-4 text-xs px-4">
                     {loading ? "Loading fonts..." : "No font found."}
                   </CommandEmpty>
                 ) : (
-                  <List
-                    height={200}
-                    width="100%"
-                    itemCount={filteredFonts.length}
-                    itemSize={32}
-                  >
-                    {({ index, style }: ListChildComponentProps) => {
-                      const font = filteredFonts[index];
-                      return (
-                        <div style={style}>
-                          <button
-                            onClick={() => handleFontChange(font.family)}
-                            className="flex items-center w-full h-8 px-3 text-xs"
-                            style={{ fontFamily: font.family }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-3 w-3",
-                                fontProperties.fontFamily === font.family
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            <span>{font.family}</span>
-                          </button>
-                        </div>
-                      );
-                    }}
-                  </List>
+                  filteredFonts.map((font) => (
+                    <CommandItem
+                      key={font.family}
+                      value={font.family}
+                      data-font-family={font.family}
+                      onSelect={() => handleFontChange(font.family)}
+                      className="flex items-center h-8 px-3 text-xs cursor-pointer hover:bg-accent"
+                      style={{ fontFamily: font.family }}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-3 w-3",
+                          fontProperties.fontFamily === font.family
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
+                      <span>{font.family}</span>
+                    </CommandItem>
+                  ))
                 )}
               </CommandList>
             </Command>
