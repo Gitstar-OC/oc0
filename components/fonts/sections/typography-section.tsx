@@ -8,7 +8,7 @@ import {
   SelectValue,
   type SectionProps,
 } from "../shared-components";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { LineChart, Type, Check, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +16,6 @@ import {
   CommandEmpty,
   CommandInput,
   CommandList,
-  CommandItem,
 } from "@/components/ui/command";
 import {
   Popover,
@@ -24,6 +23,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 
 interface GoogleFont {
   family: string;
@@ -215,6 +215,38 @@ const fontSizes = [
   8, 9, 10, 11, 12, 14, 15, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72,
 ];
 
+// Font item component for react-window
+const FontItem = ({ index, style, data }: ListChildComponentProps) => {
+  const { fonts, selectedFont, onSelect, hoveredIndex, onHover } = data;
+  const font = fonts[index];
+  const isSelected = font.family === selectedFont;
+  const isHovered = index === hoveredIndex;
+
+  return (
+    <div style={style}>
+      <button
+        onClick={() => onSelect(font.family)}
+        onMouseEnter={() => onHover(index)}
+        className={cn(
+          "flex items-center w-full h-8 px-3 text-xs cursor-pointer transition-colors text-left",
+          "hover:bg-accent hover:text-accent-foreground",
+          isHovered && "bg-accent text-accent-foreground",
+          isSelected && "bg-muted"
+        )}
+        style={{ fontFamily: font.family }}
+      >
+        <Check
+          className={cn(
+            "mr-2 h-3 w-3",
+            isSelected ? "opacity-100" : "opacity-0"
+          )}
+        />
+        <span>{font.family}</span>
+      </button>
+    </div>
+  );
+};
+
 export function TypographySection({
   fontProperties,
   updateProperty,
@@ -226,6 +258,8 @@ export function TypographySection({
   const [fontOpen, setFontOpen] = useState(false);
   const [sizeOpen, setSizeOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [hoveredIndex, setHoveredIndex] = useState(-1);
+  const listRef = useRef<any>(null);
 
   const GOOGLE_FONTS_API_KEY =
     process.env.NEXT_PUBLIC_GOOGLE_FONTS_API_KEY || "YOUR_API_KEY";
@@ -245,6 +279,75 @@ export function TypographySection({
         f.family.toLowerCase().includes(searchTerm.toLowerCase())
       ),
     [searchTerm, googleFonts]
+  );
+
+  useEffect(() => {
+    if (fontOpen && fontProperties.fontFamily && listRef.current) {
+      const selectedIndex = filteredFonts.findIndex(
+        (font) => font.family === fontProperties.fontFamily
+      );
+      if (selectedIndex >= 0) {
+        setHoveredIndex(selectedIndex);
+        const itemHeight = 32;
+        const containerHeight = 200;
+        const visibleItems = Math.floor(containerHeight / itemHeight);
+        const targetScrollTop = Math.max(
+          0,
+          (selectedIndex - Math.floor(visibleItems / 2)) * itemHeight
+        );
+        listRef.current.scrollTo(targetScrollTop);
+      }
+    }
+  }, [fontOpen, fontProperties.fontFamily, filteredFonts]);
+
+  const handleFontChange = useCallback(
+    (fontFamily: string) => {
+      updateProperty("fontFamily", fontFamily);
+      loadGoogleFont(fontFamily);
+      setFontOpen(false);
+      setSearchTerm("");
+      setHoveredIndex(-1);
+    },
+    [updateProperty]
+  ); 
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (!fontOpen || filteredFonts.length === 0) return;
+
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          const nextIndex = Math.min(
+            hoveredIndex + 1,
+            filteredFonts.length - 1
+          );
+          setHoveredIndex(nextIndex);
+          if (listRef.current) {
+            listRef.current.scrollToItem(nextIndex, "smart");
+          }
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          const prevIndex = Math.max(hoveredIndex - 1, 0);
+          setHoveredIndex(prevIndex);
+          if (listRef.current) {
+            listRef.current.scrollToItem(prevIndex, "smart");
+          }
+          break;
+        case "Enter":
+          e.preventDefault();
+          if (hoveredIndex >= 0 && filteredFonts[hoveredIndex]) {
+            handleFontChange(filteredFonts[hoveredIndex].family);
+          }
+          break;
+        case "Escape":
+          e.preventDefault();
+          setFontOpen(false);
+          break;
+      }
+    },
+    [fontOpen, filteredFonts, hoveredIndex, handleFontChange]
   );
 
   const fetchGoogleFonts = async () => {
@@ -278,29 +381,6 @@ export function TypographySection({
     link.rel = "stylesheet";
     document.head.appendChild(link);
   };
-
-  const handleFontChange = (fontFamily: string) => {
-    updateProperty("fontFamily", fontFamily);
-    loadGoogleFont(fontFamily);
-    setFontOpen(false);
-    setSearchTerm("");
-  };
-
-  useEffect(() => {
-    if (fontOpen && fontProperties.fontFamily) {
-      setTimeout(() => {
-        const selectedElement = document.querySelector(
-          `[data-font-family="${fontProperties.fontFamily}"]`
-        );
-        if (selectedElement) {
-          selectedElement.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
-        }
-      }, 100);
-    }
-  }, [fontOpen, fontProperties.fontFamily]);
 
   const getAvailableWeights = () => {
     if (!selectedFont) return [];
@@ -365,6 +445,7 @@ export function TypographySection({
                   fetchGoogleFonts();
                 }
               }}
+              onKeyDown={handleKeyDown}
             >
               {fontProperties.fontFamily || "Select font family..."}
               <ChevronDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
@@ -375,6 +456,7 @@ export function TypographySection({
             align="start"
             side="bottom"
             sideOffset={4}
+            onKeyDown={handleKeyDown}
           >
             <Command>
               <CommandInput
@@ -382,33 +464,30 @@ export function TypographySection({
                 className="h-8 text-xs"
                 value={searchTerm}
                 onValueChange={(val) => setSearchTerm(val)}
+                onKeyDown={handleKeyDown}
               />
-              <CommandList className="max-h-[200px]">
+              <CommandList className="max-h-[200px] p-0">
                 {filteredFonts.length === 0 ? (
                   <CommandEmpty className="py-4 text-xs px-4">
                     {loading ? "Loading fonts..." : "No font found."}
                   </CommandEmpty>
                 ) : (
-                  filteredFonts.map((font) => (
-                    <CommandItem
-                      key={font.family}
-                      value={font.family}
-                      data-font-family={font.family}
-                      onSelect={() => handleFontChange(font.family)}
-                      className="flex items-center h-8 px-3 text-xs cursor-pointer hover:bg-accent"
-                      style={{ fontFamily: font.family }}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-3 w-3",
-                          fontProperties.fontFamily === font.family
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
-                      />
-                      <span>{font.family}</span>
-                    </CommandItem>
-                  ))
+                  <List
+                    ref={listRef}
+                    height={200}
+                    width="100%"
+                    itemCount={filteredFonts.length}
+                    itemSize={32}
+                    itemData={{
+                      fonts: filteredFonts,
+                      selectedFont: fontProperties.fontFamily,
+                      onSelect: handleFontChange,
+                      hoveredIndex,
+                      onHover: setHoveredIndex,
+                    }}
+                  >
+                    {FontItem}
+                  </List>
                 )}
               </CommandList>
             </Command>
@@ -444,22 +523,35 @@ export function TypographySection({
               side="bottom"
               sideOffset={4}
             >
-              <div className="max-h-32 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border scrollbar-thumb-rounded-full">
-                {fontSizes.map((size) => (
-                  <Button
-                    key={size}
-                    variant="ghost"
-                    size="sm"
-                    className="w-full h-6 text-xs justify-start px-2"
-                    onClick={() => {
-                      updateProperty("fontSize", size);
-                      setSizeOpen(false);
-                    }}
-                  >
-                    {size}px
-                  </Button>
-                ))}
-              </div>
+              <List
+                height={128}
+                width={72}
+                itemCount={fontSizes.length}
+                itemSize={24}
+                itemData={{
+                  sizes: fontSizes,
+                  onSelect: (size: number) => {
+                    updateProperty("fontSize", size);
+                    setSizeOpen(false);
+                  },
+                }}
+              >
+                {({ index, style, data }: ListChildComponentProps) => {
+                  const size = data.sizes[index];
+                  return (
+                    <div style={style}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full h-6 text-xs justify-start px-2"
+                        onClick={() => data.onSelect(size)}
+                      >
+                        {size}px
+                      </Button>
+                    </div>
+                  );
+                }}
+              </List>
             </PopoverContent>
           </Popover>
         </div>
