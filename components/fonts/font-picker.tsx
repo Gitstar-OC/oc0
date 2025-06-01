@@ -61,6 +61,31 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
   }, [])
 
   return (
+    <div>
+     <div className="mb-4 p-4 bg-background rounded text-center">
+       <p
+         style={{
+           fontFamily: fontProperties.fontFamily,
+           fontSize: `${fontProperties.fontSize}px`,
+           fontWeight: fontProperties.fontWeight,
+           lineHeight: fontProperties.lineHeight,
+           letterSpacing: `${fontProperties.letterSpacing}px`,
+           textAlign: fontProperties.textAlign as any, 
+           textTransform: fontProperties.textTransform as any, 
+           textDecoration: fontProperties.textDecoration,
+           color: fontProperties.color,
+           backgroundColor: fontProperties.backgroundColor,
+           textShadow: fontProperties.textShadow,
+           WebkitTextStrokeWidth: `${fontProperties.strokeWidth}px`,
+           WebkitTextStrokeColor: fontProperties.strokeColor,
+         }}
+       >
+         The quick brown fox jumps over the lazy dog.
+       </p>
+       <div className="mt-2 text-xs text-muted-foreground">
+         Family: {fontProperties.fontFamily}, Size: {fontProperties.fontSize}px, Weight: {fontProperties.fontWeight}, Line Height: {fontProperties.lineHeight}, Letter Spacing: {fontProperties.letterSpacing}px
+       </div>
+     </div>
     <div className="w-80 bg-accent rounded-2xl p-6 m-6 border">
       <TypographySection fontProperties={fontProperties} updateProperty={updateProperty} />
 
@@ -78,6 +103,7 @@ export default function FontPicker({ onFontChange }: FontPickerProps) {
       <div className="h-px bg-border my-3"></div>
 
       <StrokeSection fontProperties={fontProperties} updateProperty={updateProperty} />
+    </div>
     </div>
   )
 }
