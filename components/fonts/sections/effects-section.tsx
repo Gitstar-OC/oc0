@@ -14,7 +14,7 @@ export function EffectsSection({ fontProperties, updateProperty }: SectionProps)
       <div className="flex items-center justify-between">
         <Heading>Effects</Heading>
         <Select value={fontProperties.textShadow} onValueChange={(value) => updateProperty("textShadow", value)}>
-          <SelectTrigger className="w-32 h-8 border bg-background rounded-lg text-xs focus:ring-1 focus:ring-ring focus:border-ring">
+          <SelectTrigger className="w-32 h-8 border bg-background dark:bg-background rounded-lg text-xs focus:ring-1 focus:ring-ring focus:border-ring">
             <SelectValue placeholder="None" />
           </SelectTrigger>
           <SelectContent>

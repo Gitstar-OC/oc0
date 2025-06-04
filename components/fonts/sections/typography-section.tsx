@@ -439,7 +439,7 @@ export function TypographySection({
               variant="outline"
               role="combobox"
               aria-expanded={fontOpen}
-              className="w-full h-8 justify-between border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
+              className="w-full h-8 justify-between border bg-background dark:bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
               onClick={() => {
                 if (!fontsLoaded) {
                   fetchGoogleFonts();
@@ -502,7 +502,7 @@ export function TypographySection({
             onChange={(e) =>
               updateProperty("fontSize", Number.parseInt(e.target.value) || 16)
             }
-            className="h-8 w-full pr-8 border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
+            className="h-8 w-full pr-8 border bg-background dark:bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
             min="1"
             max="500"
             placeholder="Size"
@@ -561,7 +561,7 @@ export function TypographySection({
             onValueChange={(value) => updateProperty("fontWeight", value)}
             disabled={!selectedFont}
           >
-            <SelectTrigger className="h-8 w-full border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring">
+            <SelectTrigger className="h-8 w-full border bg-background dark:bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring">
               <SelectValue placeholder="Weight" />
             </SelectTrigger>
             <SelectContent align="start" side="bottom" sideOffset={4}>
@@ -588,7 +588,7 @@ export function TypographySection({
                 Number.parseFloat(e.target.value) || 1.5
               )
             }
-            className="h-8 w-full pl-7 border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
+            className="h-8 w-full pl-7 border bg-background dark:bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
             placeholder="Line height"
             min="0.5"
             max="3"
@@ -606,7 +606,7 @@ export function TypographySection({
                 Number.parseFloat(e.target.value) || 0
               )
             }
-            className="h-8 w-full pl-7 border bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
+            className="h-8 w-full pl-7 border bg-background dark:bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
             placeholder="Letter spacing"
             min="-5"
             max="10"

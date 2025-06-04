@@ -22,7 +22,8 @@ export default function Page() {
 
   return (
     <div className="bg-background text-primary min-h-screen">
-      <div className="container mx-auto py-8">        <h1 className="text-3xl font-bold mb-8">Image Editor</h1>
+      <div className="container mx-auto py-8">
+        <h1 className="text-3xl font-bold mb-8">Image Editor</h1>
         <ImageEditor onImageChange={handleImageChange} />
       </div>
     </div>

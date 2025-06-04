@@ -13,7 +13,7 @@ export function StrokeSection({ fontProperties, updateProperty }: SectionProps) 
           type="number"
           value={fontProperties.strokeWidth}
           onChange={(e) => updateProperty("strokeWidth", Number.parseFloat(e.target.value) || 0)}
-          className="h-8 border bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
+          className="h-8 border bg-background dark:bg-background rounded-lg text-sm focus:ring-1 focus:ring-ring focus:border-ring"
           placeholder="Stroke Width"
           min="0"
           max="5"
@@ -29,7 +29,7 @@ export function StrokeSection({ fontProperties, updateProperty }: SectionProps) 
           <Input
             value={fontProperties.strokeColor}
             onChange={(e) => updateProperty("strokeColor", e.target.value)}
-            className="h-8 border bg-background rounded-lg text-sm flex-1 focus:ring-1 focus:ring-ring focus:border-ring"
+            className="h-8 border bg-background dark:bg-background rounded-lg text-sm flex-1 focus:ring-1 focus:ring-ring focus:border-ring"
             placeholder="Stroke Color"
           />
         </div>
