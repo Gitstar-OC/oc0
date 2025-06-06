@@ -15,7 +15,7 @@ export function CaseSection({ fontProperties, updateProperty }: SectionProps) {
     <div className="mb-3">
       <div className="flex items-center justify-between">
         <Heading>Case</Heading>
-        <div className="bg-primary-foreground rounded-lg p-0.5 flex">
+        <div className="bg-accent rounded-lg p-0.5 flex">
           {caseOptions.map((caseOption) => (
             <button
               key={caseOption.value}

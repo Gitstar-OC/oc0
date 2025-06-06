@@ -21,7 +21,7 @@ export function AlignmentSection({ fontProperties, updateProperty }: SectionProp
     <div className="mb-3">
       <div className="flex items-center justify-between">
         <Heading>Alignment</Heading>
-        <div className="bg-primary-foreground rounded-lg p-0.5 flex">
+        <div className="bg-accent rounded-lg p-0.5 flex">
           {alignOptions.map((align) => (
             <button
               key={align.value}

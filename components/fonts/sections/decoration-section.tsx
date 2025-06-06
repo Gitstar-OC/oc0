@@ -19,7 +19,7 @@ export function DecorationSection({ fontProperties, updateProperty }: SectionPro
     <div className="mb-3">
       <div className="flex items-center justify-between">
         <Heading>Decoration</Heading>
-        <div className="bg-primary-foreground rounded-lg p-0.5 flex">
+        <div className="bg-accent rounded-lg p-0.5 flex">
           {decorationOptions.map((decoration) => (
             <button
               key={decoration.value}

@@ -51,7 +51,7 @@ export default function ImageEditor({ onImageChange }: ImageEditorProps) {
   return (
     <div>
       <div className="mb-4 p-4 bg-background rounded text-center">
-        <div className="relative w-full h-48 bg-gray-200 rounded overflow-hidden">
+        {/* <div className="relative w-full h-48  rounded overflow-hidden">
           <img
             src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"
             alt="Sample"
@@ -61,13 +61,13 @@ export default function ImageEditor({ onImageChange }: ImageEditorProps) {
               boxShadow: imageProperties.dropShadow,
             }}
           />
-        </div>
+        </div> */}
         <div className="mt-2 text-xs text-muted-foreground">
           Blur: {imageProperties.blur}px, Contrast: {imageProperties.contrast}%, Brightness: {imageProperties.brightness}%
         </div>
       </div>
       
-      <div className="w-80 bg-accent rounded-2xl p-6 m-6 border">
+      <div className="w-80 bg-primary-foreground rounded-2xl p-6 m-6 border">
         <FilterSection imageProperties={imageProperties} updateProperty={updateProperty} />
 
         <div className="h-px bg-border my-3"></div>

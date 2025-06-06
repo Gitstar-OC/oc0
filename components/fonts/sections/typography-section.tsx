@@ -439,7 +439,7 @@ export function TypographySection({
               variant="outline"
               role="combobox"
               aria-expanded={fontOpen}
-              className="w-full h-8 justify-between border bg-background dark:bg-background rounded-md text-xs focus:ring-1 focus:ring-ring focus:border-ring"
+              className="w-full h-8 justify-between border bg-background dark:bg-background rounded-md text-xs focus:ring-1 focus:ring-ring hover:bg-neutral-50 hover:cursor-pointer focus:border-ring"
               onClick={() => {
                 if (!fontsLoaded) {
                   fetchGoogleFonts();
@@ -452,7 +452,7 @@ export function TypographySection({
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="w-[300px] p-0"
+            className="w-[270px] p-0"
             align="start"
             side="bottom"
             sideOffset={4}
@@ -518,14 +518,14 @@ export function TypographySection({
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-20 p-1"
+              className="w-32 p-1"
               align="end"
               side="bottom"
               sideOffset={4}
             >
               <List
                 height={128}
-                width={72}
+                width={128}
                 itemCount={fontSizes.length}
                 itemSize={24}
                 itemData={{
