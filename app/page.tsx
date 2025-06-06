@@ -9,9 +9,9 @@ export default function Page() {
       <Link href="/images" className="text-blue-500 hover:underline ml-4">
         Go to Images Page
       </Link>
-      <Link href="/budframe" className="text-blue-500 hover:underline ml-4">
+      {/* <Link href="/budframe" className="text-blue-500 hover:underline ml-4">
         Learn to build your own docs framework
-      </Link>
+      </Link> */}
     </div>
   );
 }
