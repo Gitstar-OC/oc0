@@ -28,6 +28,8 @@ export default function Page() {
 
        <br/ > 
         Hope you guys can understand this, I will post 2 final or 3 final devlogs about what the image editor does and what's the purpose of it along with budframe and other stuff. 
+
+        (Also some of you guys won't believe that this is the length of my travel so I will attach all of my tickets and appoinment dates after everything is done / when I come to sf! )
       </h1>
     </div>
   );
