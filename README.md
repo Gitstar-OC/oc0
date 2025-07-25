@@ -12,6 +12,9 @@ This is the project that I worked on for a neighborhood. It's divided into two d
 The live version of the project is ready and you can check it out at https://oc0.io 
 
 ### Important Notes
+
+For shipwreked moderations - if you want to try out one of the other tool I might be able to show you how that work. 
+
 *   **Dark Theme:** If you use a dark theme for the fonts tool, you will need to change the color of the text from `#000000` to `#ffffff` to see the changes.
 *   **Image Editor UI:** The UI for the image editor does not look how it looks in the Figma files. I tried to create custom selectors, but they lag a lot on smaller screens.
 *   **Project Scope:** Note that oc0 was originally a collection of 4 tools, which I reduced to 2. I plan to use the others for other projects. The total time for all of this was 104 hours, as I was planning to make oc0 a personal site at first (which you can also see in the Figma file). I also need to ship some parts which I never did because of travel.
