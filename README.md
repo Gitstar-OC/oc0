@@ -13,7 +13,7 @@ The live version of the project is ready and you can check it out at https://oc0
 
 ### Important Notes
 
-For shipwreked moderations - if you want to try out one of the other tool I might be able to show you how that work. 
+For shipwreked moderations - if you want to try out one of the other tool I might be able to show you how that work. Some of the hours from the complete 104 hours were used for creating the version of the portfolio site which you see in the figma files. Later I was told that I cannot make an portfolio site as it will not be enough and also 100 hours on portfolio site is not useful for myself. 
 
 *   **Dark Theme:** If you use a dark theme for the fonts tool, you will need to change the color of the text from `#000000` to `#ffffff` to see the changes.
 *   **Image Editor UI:** The UI for the image editor does not look how it looks in the Figma files. I tried to create custom selectors, but they lag a lot on smaller screens.
