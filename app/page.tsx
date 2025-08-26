@@ -1,14 +1,10 @@
-import Link from "next/link";
 
 export default function Page() {
   return (
     <div className="min-h-screen  bg-background p-8">
-      <Link href="/fonts" className="text-blue-500 hover:underline">
-        Go to Fonts Page
-      </Link>
-      <Link href="/images" className="text-blue-500 hover:underline ml-4">
-        Go to Images Page
-      </Link>
+      <a href="https://puretube.oc0.io" className="text-blue-500 hover:underline">
+        Go to Puretube
+      </a>
     </div>
   );
 }
